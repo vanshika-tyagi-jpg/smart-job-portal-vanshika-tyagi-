@@ -8,7 +8,7 @@ function Jobs() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/jobs");
+        const res = await axios.get("https://job-portal-backend-fq1h.onrender.com/api/jobs");
         setJobs(res.data);
       } catch (err) {
         console.log(err);
@@ -24,7 +24,7 @@ function Jobs() {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/applications/apply",
+        "https://job-portal-backend-fq1h.onrender.com/api/applications/apply",
         { jobId },
         {
           headers: {
