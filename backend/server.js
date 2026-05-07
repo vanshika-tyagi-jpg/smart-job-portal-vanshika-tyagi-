@@ -5,12 +5,16 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  }),
+);
 app.use(express.json());
 
 // test route
 app.get("/", (req, res) => {
-  res.send("Backend running 🚀");
+  res.send("Backend running------");
 });
 
 // routes
@@ -25,7 +29,7 @@ app.use("/api/applications", applicationRoutes);
 // connect DB
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected ✅"))
+  .then(() => console.log("MongoDB connected -----"))
   .catch((err) => console.log(err));
 
 const PORT = process.env.PORT || 5000;
