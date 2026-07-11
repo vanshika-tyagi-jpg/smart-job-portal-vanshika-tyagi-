@@ -71,7 +71,7 @@ const sampleJobs = [
 async function seed() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB connected");
+    console.log(" MongoDB connected");
 
     // Create or find a recruiter user to own the jobs
     let recruiter = await User.findOne({ email: "recruiter@demo.com" });
@@ -86,16 +86,16 @@ async function seed() {
         password: hashedPassword,
         role: "recruiter",
       });
-      console.log("✅ Demo recruiter account created");
+      console.log(" Demo recruiter account created");
       console.log("   Email: recruiter@demo.com");
       console.log("   Password: Demo@1234");
     } else {
-      console.log("ℹ️  Demo recruiter already exists");
+      console.log("ℹ  Demo recruiter already exists");
     }
 
     // Clear existing jobs
     await Job.deleteMany({});
-    console.log("🗑️  Cleared existing jobs");
+    console.log("  Cleared existing jobs");
 
     // Insert sample jobs
     const jobsWithOwner = sampleJobs.map((job) => ({
@@ -104,12 +104,12 @@ async function seed() {
     }));
 
     await Job.insertMany(jobsWithOwner);
-    console.log(`✅ Inserted ${sampleJobs.length} sample job listings`);
+    console.log(`Inserted ${sampleJobs.length} sample job listings`);
 
-    console.log("\n🚀 Seed complete! Open http://localhost:3000/jobs to see them.");
+    console.log("\n Seed complete! Open http://localhost:3000/jobs to see them.");
     process.exit(0);
   } catch (err) {
-    console.error("❌ Seed failed:", err.message);
+    console.error(" Seed failed:", err.message);
     process.exit(1);
   }
 }
