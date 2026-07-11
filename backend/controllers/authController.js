@@ -25,7 +25,7 @@ exports.registerUser = async (req, res) => {
       name,
       email: normalizedEmail,
       password: hashedPassword,
-      role,
+      role: role || "student",
     });
 
     await user.save();
@@ -60,7 +60,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role, name: user.name, email: user.email },
       process.env.JWT_SECRET || "secret123",
       { expiresIn: "1d" },
     );
@@ -68,7 +68,28 @@ exports.loginUser = async (req, res) => {
     res.json({
       message: "Login successful",
       token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get current logged-in user's profile (NEW)
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
