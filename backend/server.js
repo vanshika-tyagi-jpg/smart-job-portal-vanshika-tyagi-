@@ -15,7 +15,7 @@ app.use(express.json());
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 app.get("/", (req, res) => {
-  res.send("Backend running ✅");
+  res.send("Backend running ");
 });
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
