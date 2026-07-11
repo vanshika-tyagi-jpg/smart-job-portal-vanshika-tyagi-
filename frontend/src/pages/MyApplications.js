@@ -24,54 +24,73 @@ function MyApplications() {
 
   if (loading) {
     return (
-      <div style={styles.centered}>
-        <div style={styles.spinner}>⏳</div>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-slate font-body">
+        <div className="text-4xl mb-3">⏳</div>
         <p>Loading your applications...</p>
       </div>
     );
   }
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>📋 My Applications</h1>
-        <p style={styles.subtitle}>
+    <div className="min-h-screen bg-paper px-6 py-8 max-w-3xl mx-auto font-body">
+      <div className="mb-7">
+        <h1 className="font-display font-bold text-3xl text-ink">📋 My applications</h1>
+        <p className="text-slate text-sm mt-1.5">
           {apps.length > 0
             ? `You have applied to ${apps.length} job${apps.length > 1 ? "s" : ""}`
             : "No applications yet"}
         </p>
       </div>
 
-      {error && <div style={styles.errorBox}>{error}</div>}
+      {error && (
+        <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm mb-5">{error}</div>
+      )}
 
       {apps.length === 0 && !error ? (
-        <div style={styles.empty}>
-          <div style={{ fontSize: "52px", marginBottom: "12px" }}>📭</div>
-          <p style={{ color: "#6b7280", fontSize: "16px" }}>
-            You haven't applied to any jobs yet.
-          </p>
-          <a href="/jobs" style={styles.browseLink}>Browse Jobs →</a>
+        <div className="text-center py-16">
+          <div className="text-5xl mb-3">📭</div>
+          <p className="text-slate text-base">You haven't applied to any jobs yet.</p>
+          <a
+            href="/jobs"
+            className="inline-block mt-4 px-6 py-2.5 bg-teal text-white rounded-lg font-semibold hover:bg-teal-dark transition-colors"
+          >
+            Browse jobs →
+          </a>
         </div>
-      ) : (
-        <div style={styles.grid}>
+      ):(
+        <div className="flex flex-col gap-4">
           {apps.map((app) => (
-            <div key={app._id} style={styles.card}>
-              <div style={styles.cardIcon}>💼</div>
-              <div style={styles.cardBody}>
-                <h3 style={styles.jobTitle}>{app.job?.title || "Job Removed"}</h3>
-                <p style={styles.company}>🏢 {app.job?.company || "N/A"}</p>
-                {app.job?.location && (
-                  <p style={styles.location}>📍 {app.job.location}</p>
-                )}
-                <p style={styles.appliedDate}>
-                  Applied on: {new Date(app.createdAt).toLocaleDateString("en-IN", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
+            <div
+              key={app._id}
+              className="bg-white border border-line rounded-2xl flex overflow-hidden"
+            >
+              <div className="flex-1 p-5 flex items-start gap-4">
+                <div className="text-2xl shrink-0">💼</div>
+                <div className="flex-1">
+                  <h3 className="font-display font-bold text-base text-ink mb-0.5">
+                    {app.job?.title || "Job removed"}
+                  </h3>
+                  <p className="text-slate text-sm mb-0.5">🏢 {app.job?.company || "N/A"}</p>
+                  {app.job?.location && (
+                    <p className="text-slate text-xs mb-0.5">📍 {app.job.location}</p>
+                  )}
+                  <p className="font-mono text-[11px] text-slate/70 mt-2">
+                    Applied on:{" "}
+                    {new Date(app.createdAt).toLocaleDateString("en-IN", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
               </div>
-              <span style={styles.statusBadge}>Applied ✅</span>
+
+              {/* Ticket stub — stamped */}
+              <div className="w-[110px] shrink-0 bg-teal-light border-l-2 border-dashed border-teal flex items-center justify-center px-2">
+                <span className="font-mono text-xs font-semibold text-teal-dark uppercase tracking-wide text-center">
+                  ✅ Applied
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -79,115 +98,5 @@ function MyApplications() {
     </div>
   );
 }
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    backgroundColor: "#f8fafc",
-    padding: "32px 24px",
-    maxWidth: "900px",
-    margin: "0 auto",
-  },
-  header: {
-    marginBottom: "28px",
-  },
-  title: {
-    margin: 0,
-    fontSize: "30px",
-    color: "#1e3a8a",
-    fontWeight: "800",
-  },
-  subtitle: {
-    margin: "6px 0 0",
-    color: "#6b7280",
-    fontSize: "15px",
-  },
-  centered: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "60vh",
-    color: "#6b7280",
-  },
-  spinner: {
-    fontSize: "40px",
-    marginBottom: "12px",
-  },
-  errorBox: {
-    backgroundColor: "#fee2e2",
-    color: "#dc2626",
-    padding: "12px 16px",
-    borderRadius: "8px",
-    marginBottom: "20px",
-    fontSize: "14px",
-  },
-  empty: {
-    textAlign: "center",
-    padding: "60px 20px",
-  },
-  browseLink: {
-    display: "inline-block",
-    marginTop: "16px",
-    padding: "10px 24px",
-    backgroundColor: "#2563eb",
-    color: "white",
-    borderRadius: "8px",
-    textDecoration: "none",
-    fontWeight: "600",
-  },
-  grid: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-  card: {
-    backgroundColor: "white",
-    borderRadius: "14px",
-    padding: "20px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.06)",
-    display: "flex",
-    alignItems: "flex-start",
-    gap: "16px",
-    border: "1px solid #f0f0f0",
-  },
-  cardIcon: {
-    fontSize: "28px",
-    flexShrink: 0,
-  },
-  cardBody: {
-    flex: 1,
-  },
-  jobTitle: {
-    margin: "0 0 4px",
-    fontSize: "17px",
-    fontWeight: "700",
-    color: "#1e293b",
-  },
-  company: {
-    margin: "0 0 4px",
-    color: "#4b5563",
-    fontSize: "14px",
-  },
-  location: {
-    margin: "0 0 4px",
-    color: "#6b7280",
-    fontSize: "13px",
-  },
-  appliedDate: {
-    margin: "8px 0 0",
-    color: "#9ca3af",
-    fontSize: "12px",
-  },
-  statusBadge: {
-    flexShrink: 0,
-    padding: "5px 12px",
-    backgroundColor: "#d1fae5",
-    color: "#065f46",
-    borderRadius: "20px",
-    fontSize: "12px",
-    fontWeight: "600",
-  },
-};
 
 export default MyApplications;

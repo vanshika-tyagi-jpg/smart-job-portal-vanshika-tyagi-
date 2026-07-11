@@ -31,205 +31,120 @@ const Register = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <form style={styles.form} onSubmit={handleRegister}>
-        <div style={styles.iconWrap}>✨</div>
-        <h2 style={styles.heading}>Create Account</h2>
-        <p style={styles.subheading}>Join the Job Portal today</p>
-
-        {error && <div style={styles.errorBox}>{error}</div>}
-        {success && <div style={styles.successBox}>{success}</div>}
-
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Full Name</label>
-          <input
-            id="reg-name"
-            type="text"
-            placeholder="Enter your full name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={styles.input}
-            required
-          />
+    <div className="min-h-screen flex justify-center items-center bg-paper font-body px-5 py-6">
+      <form
+        onSubmit={handleRegister}
+        className="bg-white w-[400px] rounded-2xl shadow-sm border border-line overflow-hidden"
+      >
+        {/* Ticket-stub top strip */}
+        <div className="bg-ink px-10 pt-7 pb-5 text-center border-b-2 border-dashed border-amber">
+          <div className="text-4xl mb-2">✨</div>
+          <h2 className="font-display font-bold text-xl text-white">Create account</h2>
+          <p className="text-amber-light/80 text-xs font-mono mt-1 uppercase tracking-wider">
+            Join the job portal today
+          </p>
         </div>
 
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Email</label>
-          <input
-            id="reg-email"
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-            required
-          />
-        </div>
+        <div className="p-8 flex flex-col gap-4">
+          {error && (
+            <div className="bg-red-50 text-red-600 px-3.5 py-2.5 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="bg-green-50 text-green-700 px-3.5 py-2.5 rounded-lg text-sm">
+              {success}
+            </div>
+          )}
 
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Password</label>
-          <input
-            id="reg-password"
-            type="password"
-            placeholder="Create a password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-            required
-          />
-        </div>
-
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>I am a...</label>
-          <div style={styles.roleSelector}>
-            <button
-              type="button"
-              id="role-student"
-              onClick={() => setRole("student")}
-              style={{
-                ...styles.roleBtn,
-                ...(role === "student" ? styles.roleBtnActive : {}),
-              }}
-            >
-              🎓 Student
-            </button>
-            <button
-              type="button"
-              id="role-recruiter"
-              onClick={() => setRole("recruiter")}
-              style={{
-                ...styles.roleBtn,
-                ...(role === "recruiter" ? styles.roleBtnActive : {}),
-              }}
-            >
-              🏢 Recruiter
-            </button>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-ink/80 text-sm font-medium">Full name</label>
+            <input
+              id="reg-name"
+              type="text"
+              placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="px-3.5 py-3 rounded-lg border border-line text-[15px] outline-none focus:border-teal focus:ring-2 focus:ring-teal-light transition-shadow"
+              required
+            />
           </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-ink/80 text-sm font-medium">Email</label>
+            <input
+              id="reg-email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="px-3.5 py-3 rounded-lg border border-line text-[15px] outline-none focus:border-teal focus:ring-2 focus:ring-teal-light transition-shadow"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-ink/80 text-sm font-medium">Password</label>
+            <input
+              id="reg-password"
+              type="password"
+              placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="px-3.5 py-3 rounded-lg border border-line text-[15px] outline-none focus:border-teal focus:ring-2 focus:ring-teal-light transition-shadow"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-ink/80 text-sm font-medium">I am a...</label>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                id="role-student"
+                onClick={() => setRole("student")}
+                className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-colors ${
+                  role === "student"
+                    ? "border-teal bg-teal-light text-teal-dark"
+                    : "border-line bg-white text-slate"
+                }`}
+              >
+                🎓 Student
+              </button>
+              <button
+                type="button"
+                id="role-recruiter"
+                onClick={() => setRole("recruiter")}
+                className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-colors ${
+                  role === "recruiter"
+                    ? "border-amber bg-amber-light text-amber-dark"
+                    : "border-line bg-white text-slate"
+                }`}
+              >
+                🏢 Recruiter
+              </button>
+            </div>
+          </div>
+
+          <button
+            id="reg-submit"
+            type="submit"
+            disabled={loading}
+            className="mt-1 py-3.5 bg-teal text-white rounded-lg font-semibold text-base hover:bg-teal-dark transition-colors disabled:opacity-60"
+          >
+            {loading ? "Creating account..." : "Create account"}
+          </button>
+
+          <p className="text-center text-sm text-slate">
+            Already have an account?{" "}
+            <Link to="/login" className="text-teal font-medium hover:underline">
+              Sign in
+            </Link>
+          </p>
         </div>
-
-        <button id="reg-submit" type="submit" style={styles.button} disabled={loading}>
-          {loading ? "Creating Account..." : "Create Account"}
-        </button>
-
-        <p style={styles.switchText}>
-          Already have an account?{" "}
-          <Link to="/login" style={styles.switchLink}>Sign in</Link>
-        </p>
       </form>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)",
-    padding: "20px",
-  },
-  form: {
-    background: "white",
-    padding: "44px 40px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 30px rgba(0,0,0,0.10)",
-    width: "400px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-  iconWrap: {
-    fontSize: "36px",
-    textAlign: "center",
-  },
-  heading: {
-    textAlign: "center",
-    color: "#1e3a8a",
-    margin: 0,
-    fontSize: "24px",
-    fontWeight: "700",
-  },
-  subheading: {
-    textAlign: "center",
-    color: "#6b7280",
-    margin: 0,
-    fontSize: "14px",
-  },
-  errorBox: {
-    backgroundColor: "#fee2e2",
-    color: "#dc2626",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "14px",
-  },
-  successBox: {
-    backgroundColor: "#d1fae5",
-    color: "#065f46",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "14px",
-  },
-  fieldGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px",
-  },
-  label: {
-    color: "#374151",
-    fontSize: "14px",
-    fontWeight: "500",
-  },
-  input: {
-    padding: "12px 14px",
-    borderRadius: "8px",
-    border: "1.5px solid #d1d5db",
-    fontSize: "15px",
-    outline: "none",
-  },
-  roleSelector: {
-    display: "flex",
-    gap: "12px",
-  },
-  roleBtn: {
-    flex: 1,
-    padding: "10px",
-    border: "2px solid #e5e7eb",
-    borderRadius: "8px",
-    background: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-    fontWeight: "500",
-    color: "#6b7280",
-    transition: "all 0.2s",
-  },
-  roleBtnActive: {
-    border: "2px solid #2563eb",
-    backgroundColor: "#eff6ff",
-    color: "#2563eb",
-  },
-  button: {
-    padding: "13px",
-    backgroundColor: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "16px",
-    fontWeight: "600",
-    cursor: "pointer",
-    marginTop: "4px",
-  },
-  switchText: {
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#6b7280",
-    margin: 0,
-  },
-  switchLink: {
-    color: "#2563eb",
-    textDecoration: "none",
-    fontWeight: "500",
-  },
 };
 
 export default Register;

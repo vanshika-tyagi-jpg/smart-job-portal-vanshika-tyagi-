@@ -19,7 +19,6 @@ const Login = () => {
 
     try {
       const res = await loginUser({ email, password });
-      // Store token + user in context (and localStorage)
       login(res.data.token, res.data.user);
       navigate("/jobs");
     } catch (err) {
@@ -30,135 +29,72 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <form style={styles.form} onSubmit={handleLogin}>
-        <div style={styles.iconWrap}>🔐</div>
-        <h2 style={styles.heading}>Welcome Back</h2>
-        <p style={styles.subheading}>Sign in to your account</p>
-
-        {error && <div style={styles.errorBox}>{error}</div>}
-
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Email</label>
-          <input
-            id="login-email"
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-            required
-          />
+    <div className="min-h-screen flex justify-center items-center bg-paper font-body px-5">
+      <form
+        onSubmit={handleLogin}
+        className="bg-white w-[380px] rounded-2xl shadow-sm border border-line overflow-hidden"
+      >
+        {/* Ticket-stub top strip */}
+        <div className="bg-ink px-10 pt-7 pb-5 text-center border-b-2 border-dashed border-teal">
+          <div className="text-4xl mb-2">🔐</div>
+          <h2 className="font-display font-bold text-xl text-white">Welcome back</h2>
+          <p className="text-teal-light/70 text-xs font-mono mt-1 uppercase tracking-wider">
+            Sign in to continue
+          </p>
         </div>
 
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Password</label>
-          <input
-            id="login-password"
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-            required
-          />
+        <div className="p-8 flex flex-col gap-4">
+          {error && (
+            <div className="bg-red-50 text-red-600 px-3.5 py-2.5 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-ink/80 text-sm font-medium">Email</label>
+            <input
+              id="login-email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="px-3.5 py-3 rounded-lg border border-line text-[15px] outline-none focus:border-teal focus:ring-2 focus:ring-teal-light transition-shadow"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-ink/80 text-sm font-medium">Password</label>
+            <input
+              id="login-password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="px-3.5 py-3 rounded-lg border border-line text-[15px] outline-none focus:border-teal focus:ring-2 focus:ring-teal-light transition-shadow"
+              required
+            />
+          </div>
+
+          <button
+            id="login-submit"
+            type="submit"
+            disabled={loading}
+            className="mt-1 py-3.5 bg-teal text-white rounded-lg font-semibold text-base hover:bg-teal-dark transition-colors disabled:opacity-60"
+          >
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+
+          <p className="text-center text-sm text-slate">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-teal font-medium hover:underline">
+              Register here
+            </Link>
+          </p>
         </div>
-
-        <button id="login-submit" type="submit" style={styles.button} disabled={loading}>
-          {loading ? "Signing in..." : "Sign In"}
-        </button>
-
-        <p style={styles.switchText}>
-          Don't have an account?{" "}
-          <Link to="/register" style={styles.switchLink}>Register here</Link>
-        </p>
       </form>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)",
-  },
-  form: {
-    background: "white",
-    padding: "44px 40px",
-    borderRadius: "16px",
-    boxShadow: "0 8px 30px rgba(0,0,0,0.10)",
-    width: "380px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px",
-  },
-  iconWrap: {
-    fontSize: "36px",
-    textAlign: "center",
-  },
-  heading: {
-    textAlign: "center",
-    color: "#1e3a8a",
-    margin: 0,
-    fontSize: "24px",
-    fontWeight: "700",
-  },
-  subheading: {
-    textAlign: "center",
-    color: "#6b7280",
-    margin: 0,
-    fontSize: "14px",
-  },
-  errorBox: {
-    backgroundColor: "#fee2e2",
-    color: "#dc2626",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "14px",
-  },
-  fieldGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px",
-  },
-  label: {
-    color: "#374151",
-    fontSize: "14px",
-    fontWeight: "500",
-  },
-  input: {
-    padding: "12px 14px",
-    borderRadius: "8px",
-    border: "1.5px solid #d1d5db",
-    fontSize: "15px",
-    outline: "none",
-    transition: "border 0.2s",
-  },
-  button: {
-    padding: "13px",
-    backgroundColor: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "16px",
-    fontWeight: "600",
-    cursor: "pointer",
-    marginTop: "4px",
-  },
-  switchText: {
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#6b7280",
-    margin: 0,
-  },
-  switchLink: {
-    color: "#2563eb",
-    textDecoration: "none",
-    fontWeight: "500",
-  },
 };
 
 export default Login;

@@ -6,6 +6,9 @@ require("dotenv").config();
 
 const app = express();
 
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("JWT_SECRET is not set");
+
 app.use(
   cors({
     origin: "*",
@@ -13,12 +16,11 @@ app.use(
 );
 app.use(express.json());
 
-// ─── Health check ─────────────────────────────────────────────────────────────
 app.get("/", (req, res) => {
   res.send("Backend running ");
 });
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
+
 const authRoutes = require("./routes/authRoutes");
 const jobRoutes = require("./routes/jobRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
@@ -27,9 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 
-// ─── External API Proxy (avoids browser CORS issues) ─────────────────────────
 
-// Proxy: Remotive remote jobs API
 app.get("/api/external/remote-jobs", async (req, res) => {
   try {
     const { search = "", limit = 20 } = req.query;
@@ -42,24 +42,21 @@ app.get("/api/external/remote-jobs", async (req, res) => {
   }
 });
 
-// Proxy: RestCountries API
+// Proxy: countries.dev (RestCountries v3.1 replacement — v3.1 was deprecated)
 app.get("/api/external/countries", async (req, res) => {
   try {
     const response = await axios.get(
-      "https://restcountries.com/v3.1/all?fields=name,flags,region,population"
+      "https://countries.dev/countries?fields=name,flags,region,population&sort=population&order=desc&limit=30"
     );
-    // Sort by population descending, return top 30
-    const sorted = response.data
-      .sort((a, b) => b.population - a.population)
-      .slice(0, 30);
-    res.json(sorted);
+    res.json(response.data);
   } catch (error) {
-    console.error("RestCountries API error:", error.message);
+    console.error("Countries API error:", error.message);
     res.status(500).json({ error: "Failed to fetch countries" });
   }
 });
 
-// ─── MongoDB Connection ───────────────────────────────────────────────────────
+
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected -----"))

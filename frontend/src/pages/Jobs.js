@@ -67,18 +67,30 @@ function Jobs() {
     }
   };
 
+  // Derive a short "airport code" style badge from the job title —
+  // e.g. "Senior Frontend Engineer" -> "SFE"
+  const codeFor = (title) =>
+    title
+      .split(" ")
+      .filter((w) => w.length > 0)
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 3)
+      .toUpperCase();
+
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
+    <div className="min-h-screen bg-paper px-6 py-8 max-w-6xl mx-auto font-body">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-7">
         <div>
-          <h1 style={styles.title}>🚀 Job Listings</h1>
-          <p style={styles.subtitle}>{jobs.length} opportunities available</p>
+          <h1 className="font-display font-bold text-3xl text-ink">🚀 Job Listings</h1>
+          <p className="text-slate text-sm mt-1">{jobs.length} opportunities available</p>
         </div>
         {isLoggedIn && user?.role === "recruiter" && (
           <button
             id="toggle-post-job"
             onClick={() => setShowForm((v) => !v)}
-            style={styles.postBtn}
+            className="px-5 py-2.5 bg-teal text-white rounded-lg font-semibold text-sm hover:bg-teal-dark transition-colors"
           >
             {showForm ? "✕ Cancel" : "+ Post a Job"}
           </button>
@@ -87,92 +99,122 @@ function Jobs() {
 
       {/* Post Job Form (Recruiter only) */}
       {showForm && (
-        <form style={styles.postForm} onSubmit={handlePostJob}>
-          <h3 style={{ marginTop: 0, color: "#1e3a8a" }}>Post a New Job</h3>
-          {formError && <div style={styles.errorBox}>{formError}</div>}
-          <div style={styles.formGrid}>
+        <form
+          onSubmit={handlePostJob}
+          className="bg-white p-7 rounded-2xl shadow-sm border border-line mb-7"
+        >
+          <h3 className="font-display font-bold text-lg text-ink mb-3">Post a new job</h3>
+          {formError && (
+            <div className="bg-red-50 text-red-600 px-4 py-2.5 rounded-lg text-sm mb-3">
+              {formError}
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-3 mb-4">
             <input
               id="job-title"
-              style={styles.formInput}
-              placeholder="Job Title *"
+              className="px-3.5 py-2.5 border border-line rounded-lg text-sm outline-none focus:border-teal focus:ring-2 focus:ring-teal-light"
+              placeholder="Job title *"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               required
             />
             <input
               id="job-company"
-              style={styles.formInput}
-              placeholder="Company Name *"
+              className="px-3.5 py-2.5 border border-line rounded-lg text-sm outline-none focus:border-teal focus:ring-2 focus:ring-teal-light"
+              placeholder="Company name *"
               value={form.company}
               onChange={(e) => setForm({ ...form, company: e.target.value })}
               required
             />
             <input
               id="job-location"
-              style={styles.formInput}
+              className="px-3.5 py-2.5 border border-line rounded-lg text-sm outline-none focus:border-teal focus:ring-2 focus:ring-teal-light"
               placeholder="Location"
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
             />
             <textarea
               id="job-description"
-              style={{ ...styles.formInput, gridColumn: "1 / -1", minHeight: "80px", resize: "vertical" }}
-              placeholder="Job Description *"
+              className="col-span-2 px-3.5 py-2.5 border border-line rounded-lg text-sm outline-none focus:border-teal focus:ring-2 focus:ring-teal-light min-h-[80px] resize-y"
+              placeholder="Job description *"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               required
             />
           </div>
-          <button id="submit-job" type="submit" style={styles.submitBtn} disabled={formLoading}>
-            {formLoading ? "Posting..." : "Post Job"}
+          <button
+            id="submit-job"
+            type="submit"
+            disabled={formLoading}
+            className="px-7 py-2.5 bg-amber text-amber-dark font-semibold text-sm rounded-lg hover:bg-amber-dark hover:text-amber-light transition-colors disabled:opacity-60"
+          >
+            {formLoading ? "Posting..." : "Post job"}
           </button>
         </form>
       )}
 
       {/* Job Cards */}
       {loading ? (
-        <div style={styles.loading}>Loading jobs...</div>
+        <div className="text-center py-16 text-slate">Loading jobs...</div>
       ) : jobs.length === 0 ? (
-        <div style={styles.empty}>No jobs posted yet. Be the first!</div>
+        <div className="text-center py-16 text-slate">No jobs posted yet. Be the first!</div>
       ) : (
-        <div style={styles.grid}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {jobs.map((job) => (
-            <div key={job._id} style={styles.card}>
-              <div style={styles.cardHeader}>
-                <div>
-                  <h2 style={styles.jobTitle}>{job.title}</h2>
-                  <p style={styles.company}>🏢 {job.company}</p>
+            <div
+              key={job._id}
+              className="bg-white border border-line rounded-2xl flex overflow-hidden hover:shadow-md transition-shadow"
+            >
+              {/* Main content */}
+              <div className="flex-1 p-5">
+                <div className="flex justify-between items-start gap-2 mb-1">
+                  <h2 className="font-display font-bold text-lg text-ink">{job.title}</h2>
                 </div>
-                <span style={styles.locationBadge}>📍 {job.location || "Remote"}</span>
+                <p className="text-slate text-sm mb-3">🏢 {job.company}</p>
+
+                <p className="text-ink/80 text-sm leading-relaxed mb-4 line-clamp-3">
+                  {job.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="font-mono text-xs bg-amber-light text-amber-dark px-2.5 py-1 rounded-md">
+                    📍 {job.location || "Remote"}
+                  </span>
+                </div>
+
+                {job.createdBy && (
+                  <p className="text-xs text-slate/70 mb-3">Posted by {job.createdBy.name}</p>
+                )}
+
+                <div className="flex gap-2.5">
+                  <button
+                    id={`apply-${job._id}`}
+                    onClick={() => handleApply(job._id)}
+                    className="flex-1 py-2.5 bg-teal text-white rounded-lg font-semibold text-sm hover:bg-teal-dark transition-colors"
+                  >
+                    Apply now
+                  </button>
+
+                  {isLoggedIn && user?.id === job.createdBy?._id && (
+                    <button
+                      id={`delete-${job._id}`}
+                      onClick={() => handleDelete(job._id)}
+                      className="px-3.5 py-2.5 bg-red-50 text-red-600 rounded-lg font-medium text-xs hover:bg-red-100 transition-colors"
+                    >
+                      🗑️ Delete
+                    </button>
+                  )}
+                </div>
               </div>
 
-              <p style={styles.description}>{job.description}</p>
-
-              {job.createdBy && (
-                <p style={styles.postedBy}>
-                  Posted by {job.createdBy.name}
-                </p>
-              )}
-
-              <div style={styles.cardFooter}>
-                <button
-                  id={`apply-${job._id}`}
-                  onClick={() => handleApply(job._id)}
-                  style={styles.applyBtn}
-                >
-                  Apply Now
-                </button>
-
-                {/* Show delete button only to the job's creator */}
-                {isLoggedIn && user?.id === job.createdBy?._id && (
-                  <button
-                    id={`delete-${job._id}`}
-                    onClick={() => handleDelete(job._id)}
-                    style={styles.deleteBtn}
-                  >
-                    🗑️ Delete
-                  </button>
-                )}
+              {/* Boarding-pass stub */}
+              <div className="w-[92px] shrink-0 bg-teal-light border-l-2 border-dashed border-teal flex flex-col items-center justify-center gap-1.5 px-2">
+                <span className="font-mono font-bold text-xl text-teal-dark">
+                  {codeFor(job.title)}
+                </span>
+                <span className="text-[9px] uppercase tracking-wider text-teal-dark text-center">
+                  {job.location ? job.location.split(",")[0] : "Remote"}
+                </span>
               </div>
             </div>
           ))}
@@ -181,175 +223,5 @@ function Jobs() {
     </div>
   );
 }
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    backgroundColor: "#f8fafc",
-    padding: "32px 24px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: "28px",
-  },
-  title: {
-    margin: 0,
-    fontSize: "32px",
-    color: "#1e3a8a",
-    fontWeight: "800",
-  },
-  subtitle: {
-    margin: "4px 0 0",
-    color: "#6b7280",
-    fontSize: "15px",
-  },
-  postBtn: {
-    padding: "10px 20px",
-    backgroundColor: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "14px",
-  },
-  postForm: {
-    background: "white",
-    padding: "28px",
-    borderRadius: "14px",
-    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-    marginBottom: "28px",
-  },
-  formGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "12px",
-    marginBottom: "16px",
-  },
-  formInput: {
-    padding: "11px 14px",
-    border: "1.5px solid #d1d5db",
-    borderRadius: "8px",
-    fontSize: "14px",
-    outline: "none",
-    fontFamily: "inherit",
-  },
-  submitBtn: {
-    padding: "11px 28px",
-    backgroundColor: "#16a34a",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "14px",
-  },
-  errorBox: {
-    backgroundColor: "#fee2e2",
-    color: "#dc2626",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "14px",
-    marginBottom: "12px",
-  },
-  loading: {
-    textAlign: "center",
-    padding: "60px",
-    color: "#6b7280",
-    fontSize: "16px",
-  },
-  empty: {
-    textAlign: "center",
-    padding: "60px",
-    color: "#9ca3af",
-    fontSize: "16px",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-    gap: "20px",
-  },
-  card: {
-    backgroundColor: "white",
-    borderRadius: "14px",
-    padding: "22px",
-    boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    border: "1px solid #f0f0f0",
-    transition: "transform 0.2s, box-shadow 0.2s",
-  },
-  cardHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: "8px",
-  },
-  jobTitle: {
-    margin: 0,
-    fontSize: "18px",
-    fontWeight: "700",
-    color: "#1e293b",
-  },
-  company: {
-    margin: "4px 0 0",
-    color: "#4b5563",
-    fontSize: "14px",
-  },
-  locationBadge: {
-    fontSize: "12px",
-    color: "#6b7280",
-    backgroundColor: "#f3f4f6",
-    padding: "4px 10px",
-    borderRadius: "20px",
-    whiteSpace: "nowrap",
-  },
-  description: {
-    color: "#374151",
-    fontSize: "14px",
-    lineHeight: "1.6",
-    margin: 0,
-    display: "-webkit-box",
-    WebkitLineClamp: 3,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-  },
-  postedBy: {
-    fontSize: "12px",
-    color: "#9ca3af",
-    margin: 0,
-  },
-  cardFooter: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "6px",
-  },
-  applyBtn: {
-    flex: 1,
-    padding: "10px",
-    backgroundColor: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "600",
-    fontSize: "14px",
-  },
-  deleteBtn: {
-    padding: "10px 14px",
-    backgroundColor: "#fee2e2",
-    color: "#dc2626",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "500",
-    fontSize: "13px",
-  },
-};
 
 export default Jobs;

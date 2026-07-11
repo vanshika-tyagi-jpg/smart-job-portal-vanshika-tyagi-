@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #F4F7F5;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: #132019;
+}
