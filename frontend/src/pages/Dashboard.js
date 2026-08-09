@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 
-// ─── API Integration Feature ──────────────────────────────────────────────────
-// Integrates TWO external APIs via our backend proxy (no CORS issues):
-//   1. Remotive API  — live remote job listings worldwide
-//   2. countries.dev  — top countries by population with flags
-// ──────────────────────────────────────────────────────────────────────────────
-
 function Dashboard() {
   const [jobs, setJobs] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -61,7 +55,7 @@ function Dashboard() {
     <div className="min-h-screen bg-paper px-6 py-8 max-w-6xl mx-auto font-body">
       {/* Header */}
       <div className="mb-7">
-        <h1 className="font-display font-bold text-3xl text-ink">🌐 Global Remote Jobs</h1>
+        <h1 className="font-display font-bold text-3xl text-ink"> Global Remote Jobs</h1>
         <p className="text-slate text-sm mt-1.5">
           Live data from{" "}
           <a href="https://remotive.com" target="_blank" rel="noreferrer" className="text-teal font-medium hover:underline">
@@ -86,7 +80,7 @@ function Dashboard() {
       {/* Error */}
       {!loading && error && (
         <div className="bg-red-50 text-red-600 px-5 py-4 rounded-xl text-[15px] mt-3">
-          ⚠️ {error}
+           {error}
         </div>
       )}
 
@@ -111,7 +105,7 @@ function Dashboard() {
             <input
               id="dashboard-search"
               className="flex-1 min-w-[220px] px-4 py-2.5 border border-line rounded-lg text-sm outline-none focus:border-teal focus:ring-2 focus:ring-teal-light bg-white"
-              placeholder="🔍 Search job title or company..."
+              placeholder=" Search job title or company..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -157,7 +151,7 @@ function Dashboard() {
                         }}
                       />
                     ) : (
-                      <div className="text-3xl">🏢</div>
+                      <div className="text-3xl"></div>
                     )}
                     <span className="text-[11px] font-semibold text-teal-dark bg-teal-light px-2.5 py-1 rounded-full">
                       {job.category}
@@ -172,17 +166,17 @@ function Dashboard() {
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {job.job_type && (
                       <span className="font-mono text-[11px] bg-teal-light text-teal-dark px-2.5 py-1 rounded-md">
-                        ⏰ {job.job_type}
+                         {job.job_type}
                       </span>
                     )}
                     {job.candidate_required_location && (
                       <span className="font-mono text-[11px] bg-amber-light text-amber-dark px-2.5 py-1 rounded-md">
-                        🌍 {job.candidate_required_location}
+                         {job.candidate_required_location}
                       </span>
                     )}
                     {job.salary && (
                       <span className="font-mono text-[11px] bg-green-50 text-green-700 px-2.5 py-1 rounded-md">
-                        💰 {job.salary}
+                         {job.salary}
                       </span>
                     )}
                   </div>
@@ -214,7 +208,7 @@ function Dashboard() {
           {countries.length > 0 && (
             <div className="mt-14 pt-9 border-t border-line">
               <h2 className="font-display font-bold text-xl text-ink mb-1.5">
-                🌍 Top countries in the global job market
+                Top countries in the global job market
               </h2>
               <p className="text-slate text-sm mb-6">
                 Data via{" "}
